@@ -346,6 +346,9 @@ public class CommonFunctions {
             case "Test":
                 path = "https://dtdnavigatortesting.firebaseio.com/";
                 break;
+            case"Tonk":
+                path ="https://dtdtonk.firebaseio.com/";
+                break;
             case "Reengus":
                 path = "https://dtdreengus.firebaseio.com/";
                 break;
@@ -363,6 +366,12 @@ public class CommonFunctions {
                 break;
             case "Niwai":
                 path = "https://dtdniwai.firebaseio.com/";
+                break;
+            case "Jaipur-Malviyanagar":
+                path = "https://jaipur-malviyanagar.firebaseio.com/";
+                break;
+            case "Jaipur-Murlipura":
+                path = "https://jaipur-murlipura.firebaseio.com/";
                 break;
             case "Behror":
                 path = "https://dtdbehror.firebaseio.com/";

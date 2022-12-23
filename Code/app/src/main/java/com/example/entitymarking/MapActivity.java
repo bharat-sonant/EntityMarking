@@ -29,6 +29,10 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -38,6 +42,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -113,6 +118,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     RadioButton isSurveyedTrue, isSurveyedFalse;
     Bitmap photo;
     GoogleMap mMap;
+    EditText edtTHouse;
     LocationCallback locationCallback;
     LatLng lastKnownLatLngForWalkingMan = null;
     DatabaseReference rootRef;
@@ -161,6 +167,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @SuppressLint({"ResourceType", "SimpleDateFormat"})
     @RequiresApi(api = Build.VERSION_CODES.P)
     private void inIt() {
+        edtTHouse = findViewById(R.id.etTotalHouse);
         currentLineTv = findViewById(R.id.current_line_tv);
         rootRef = common.getDatabaseRef(this);
         houseTypeSpinner = findViewById(R.id.house_type_spinner);
@@ -187,6 +194,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             lastScanTimeVEL();
             checkVersionForTheApplication();
         }
+
+
+
+        edtTHouse.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                    Log.e("TAG","Enter pressed");
+                    if (!edtTHouse.getText().toString().equals("")) {
+                        int no = Integer.parseInt(edtTHouse.getText().toString());
+                        if (no > 1) {
+                            checkGpsForEntity();
+                        } else {
+//                                    houseTypeSpinner.setSelection(0);
+                            isPass = true;
+                            common.showAlertBox("Please Enter Total Number of Houses greater than one", "ok", "", MapActivity.this);
+                        }
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     private void setRB() {
@@ -246,36 +275,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void fHouseTypeFromSto() {
         common.getDatabaseStoragePath(MapActivity.this).child("/Defaults/FinalHousesType.json")
                 .getMetadata().addOnSuccessListener(storageMetadata -> {
-            long serverUpdation = storageMetadata.getCreationTimeMillis();
-            long localUpdation = common.getDatabaseSp(MapActivity.this).getLong("houseTypeLastUpdate", 0);
-            if (serverUpdation != localUpdation) {
-                common.getDatabaseSp(MapActivity.this).edit().putLong("houseTypeLastUpdate", serverUpdation).apply();
-                try {
-                    File local = File.createTempFile("temp", "txt");
-                    common.getDatabaseStoragePath(MapActivity.this)
-                            .child("/Defaults/FinalHousesType.json")
-                            .getFile(local).addOnCompleteListener(task -> {
+                    long serverUpdation = storageMetadata.getCreationTimeMillis();
+                    long localUpdation = common.getDatabaseSp(MapActivity.this).getLong("houseTypeLastUpdate", 0);
+                    if (serverUpdation != localUpdation) {
+                        common.getDatabaseSp(MapActivity.this).edit().putLong("houseTypeLastUpdate", serverUpdation).apply();
                         try {
-                            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(local)));
-                            StringBuilder sb = new StringBuilder();
-                            String str;
-                            while ((str = br.readLine()) != null) {
-                                sb.append(str);
-                            }
-                            common.getDatabaseSp(MapActivity.this).edit().putString("houseType", sb.toString().trim()).apply();
-                            parseSpinnerData();
-                        } catch (Exception e) {
+                            File local = File.createTempFile("temp", "txt");
+                            common.getDatabaseStoragePath(MapActivity.this)
+                                    .child("/Defaults/FinalHousesType.json")
+                                    .getFile(local).addOnCompleteListener(task -> {
+                                        try {
+                                            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(local)));
+                                            StringBuilder sb = new StringBuilder();
+                                            String str;
+                                            while ((str = br.readLine()) != null) {
+                                                sb.append(str);
+                                            }
+                                            common.getDatabaseSp(MapActivity.this).edit().putString("houseType", sb.toString().trim()).apply();
+                                            parseSpinnerData();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    });
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-            } else {
-                parseSpinnerData();
-            }
-        });
+                    } else {
+                        parseSpinnerData();
+                    }
+                });
     }
 
     private void parseSpinnerData() {
@@ -312,7 +341,16 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     if (houseTypeSpinner.getSelectedItemId() != 0) {
-                        onSaveClick(view);
+                        Log.e("houseTypeSpinner",""+houseTypeSpinner.getSelectedItemId());
+                        long selectedItemId = houseTypeSpinner.getSelectedItemId();
+                        if (selectedItemId == 19 || selectedItemId == 20) {
+                            edtTHouse.setVisibility(View.VISIBLE);
+                            onSaveClick(view);
+                        }else {
+                            edtTHouse.setVisibility(View.GONE);
+                            onSaveClick(view);
+                        }
+
                     }
                 }
 
@@ -545,6 +583,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void checkGpsForEntity() {
+
         LocationServices.getSettingsClient(this).checkLocationSettings(new LocationSettingsRequest.Builder()
                 .addLocationRequest(new LocationRequest().setInterval(5000).setFastestInterval(1000).setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY))
                 .setAlwaysShow(true).setNeedBle(true).build()).addOnCompleteListener(task1 -> {
@@ -662,7 +701,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     hM.put("image", MARKS_COUNT + ".jpg");
                                     hM.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
                                     hM.put("houseType", houseDataHashMap.get(houseTypeSpinner.getSelectedItem()));
-
+                                    hM.put("totalHouses", edtTHouse.getText().toString());
                                     rootRef.child("EntityMarkingData/MarkedHouses/" + selectedWard + "/" + (currentLineNumber + 1) + "/" + MARKS_COUNT).setValue(hM);
                                     rootRef.child("EntityMarkingData/LastScanTime/Surveyor").child(userId).setValue(new SimpleDateFormat("dd MMM HH:mm:ss").format(new Date()));
                                     rootRef.child("EntityMarkingData/LastScanTime/Ward").child(selectedWard).setValue(new SimpleDateFormat("dd MMM HH:mm:ss").format(new Date()));
@@ -679,6 +718,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                         common.increaseCountByOne(rootRef.child("EntityMarkingData/MarkedHouses/" + selectedWard + "/" + (currentLineNumber + 1)).child("alreadyInstalledCount"));
                                     }
                                     houseTypeSpinner.setSelection(0);
+                                    edtTHouse.setText("");
+                                    edtTHouse.setVisibility(View.GONE);
                                     setBothRBUnchecked();
                                     dateTimeTv.setText(new SimpleDateFormat("dd MMM HH:mm:ss").format(new Date()));
 
@@ -1033,7 +1074,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (isPass) {
             isPass = false;
             if (isSurveyedTrue.isChecked() || isSurveyedFalse.isChecked()) {
-                checkGpsForEntity();
+                if (edtTHouse.getVisibility()  == View.VISIBLE) {
+                    if (!edtTHouse.getText().toString().equals("")) {
+                        int length = Integer.parseInt(edtTHouse.getText().toString());
+
+                    }else {
+//                        houseTypeSpinner.setSelection(0);
+                        isPass = true;
+//                        common.showAlertBox("Please Enter Total Number of Houses greater than one", "ok", "", MapActivity.this);
+                    }
+                }else {
+                    checkGpsForEntity();
+                }
             } else {
                 isPass = true;
                 setBothRBUnchecked();
@@ -1308,6 +1360,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     mapTemp.put("modifiedDate", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
                                     mapTemp.put("status", "Re-marked");
                                     mapTemp.put("houseType", houseDataHashMap.get(spinner.getSelectedItem()));
+                                    mapTemp.put("totalHouses", edtTHouse.getText().toString());
                                     rootRef.child("EntityMarkingData/MarkedHouses/" + selectedWard + "/" + (currentLineNumber + 1) + "/" + mdm.getMarkerNumber()).updateChildren(mapTemp);
 
                                     int temp = Boolean.compare(mdm.isAlreadyInstalled(), yesRb.isChecked());

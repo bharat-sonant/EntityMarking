@@ -6,5 +6,6 @@
     <string name="reengus_btn_label">Reengus</string>
     <string name="slct_wrd_activity_label">Select Ward</string>
     <string name="already_installed_cb_text">पहले ही कार्ड का सर्वेक्षण किया जा चुका है</string>
+    <string name="enter_total_houses">Enter total houses</string>
 </resources>
 
