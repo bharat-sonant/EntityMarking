@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-        setDatabase("Test");
+        setDatabase("Tonk");
     }
 
     @SuppressLint("StaticFieldLeak")

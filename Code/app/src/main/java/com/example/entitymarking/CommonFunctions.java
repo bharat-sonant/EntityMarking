@@ -1,5 +1,7 @@
 package com.example.entitymarking;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,6 +19,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
@@ -38,6 +41,8 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -70,6 +75,10 @@ public class CommonFunctions {
         return FirebaseStorage.getInstance().getReferenceFromUrl("gs://dtdnavigator.appspot.com/" + getDatabaseSp(context).getString("storagePath", " "));
     }
 
+    private SharedPreferences getSp(Context context) {
+        SharedPreferences sp = context.getSharedPreferences("path", MODE_PRIVATE);
+        return sp;
+    }
     public void showAlertBox(String message, String pBtn, String nBtn, Context ctx) {
         hideAlertBox();
         builder = new AlertDialog.Builder(ctx);
@@ -86,6 +95,7 @@ public class CommonFunctions {
             alertDialog.dismiss();
         }
     }
+
 
     public void setProgressDialog(String title, String message, Context context, Activity activity) {
         closeDialog(activity);

@@ -12,6 +12,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
@@ -86,17 +87,22 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.maps.android.data.kml.KmlLayer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -110,6 +116,7 @@ import java.util.Objects;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+
     String selectedWard = null, selectedCity, userId, date, cbText;
     ImageView imageViewForRejectedMarker;
     int currentLineNumber = 0;                      // use + 1 to get currentLine;
@@ -190,6 +197,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             setPageTitle();
             fHouseTypeFromSto();
             fetchWardJson();
+            getCommonFileForMetaData();
             assignedWardCEL();
             lastScanTimeVEL();
             checkVersionForTheApplication();
@@ -259,6 +267,63 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             return false;
         });
         mainCheckLocationForRealTimeRequest();
+    }
+
+    public String getKmlFilePath(String wardNo, Context context) {
+        String kmlFilepath = "";
+        JSONObject jsonObject;
+        try {
+            Log.e("kml boundary list"," list "+preferences.getString("KmlBoundaryJson", ""));
+            jsonObject = new JSONObject(String.valueOf(preferences.getString("KmlBoundaryJson", "")));
+            Log.e("ward no",wardNo+"");
+            kmlFilepath = jsonObject.getString(wardNo);
+            Log.e("kml path",kmlFilepath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("kml error",e.getMessage());
+        }
+        return kmlFilepath;
+    }
+
+    private class DownloadKmlFile extends AsyncTask<String, Void, byte[]> {
+        private final String mUrl;
+
+        public DownloadKmlFile(String url) {
+            mUrl = url;
+        }
+
+        protected byte[] doInBackground(String... params) {
+            try {
+                Log.d("tag", "doInBackground: check url  " + mUrl);
+                InputStream is = new URL(mUrl).openStream();
+                Log.d("tag", "doInBackground: check url A " + is);
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                int nRead;
+                byte[] data = new byte[16384];
+                while ((nRead = is.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, nRead);
+                }
+                buffer.flush();
+                return buffer.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(byte[] byteArr) {
+            try {
+                if (byteArr != null) {
+                    Log.e("kmlLayer","kmlLayer");
+                    KmlLayer kmlLayer = new KmlLayer(mMap, new ByteArrayInputStream(byteArr), MapActivity.this);
+                    kmlLayer.addLayerToMap();
+                }
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -387,6 +452,30 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
+    public void getCommonFileForMetaData() {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        storageReference.child(preferences.getString("storagePath", "") + "/Defaults/KmlBoundary.json").getMetadata().addOnSuccessListener(storageMetadata -> {
+            long fileCreationTime = storageMetadata.getCreationTimeMillis();
+            long fileDownloadTime = preferences.getLong(preferences.getString("storagePath", "") + "Defaults/KmlBoundary.json", 0);
+            if (fileDownloadTime != fileCreationTime) {
+                storageReference.child(preferences.getString("storagePath", "") + "/Defaults/KmlBoundary.json/").getBytes(10000000).addOnSuccessListener(taskSnapshot -> {
+                    try {
+                        String str = new String(taskSnapshot, StandardCharsets.UTF_8);
+                        Log.e("String value ",str);
+                        preferences.edit().putString("KmlBoundaryJson", str).apply();
+                        preferences.edit().putLong("KmlBoundaryJsonDownloadTime", fileCreationTime).apply();
+//                        checkDate(selectedWard);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            } else {
+//                checkDate(selectedWard);
+            }
+        });
+    }
+
+
     @RequiresApi(api = Build.VERSION_CODES.P)
     private void checkDate(String wardNo) {
         try {
@@ -480,6 +569,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             celForLine();
             drawLine();
             fetchMarkerForLine(false);
+            new DownloadKmlFile(getKmlFilePath(selectedWard, this)).execute();
             common.closeDialog(this);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1059,6 +1149,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         currentLineNumber++;
                         drawLine();
                         fetchMarkerForLine(true);
+                        new DownloadKmlFile(getKmlFilePath(selectedWard, MapActivity.this)).execute();
                     } else {
                         common.closeDialog(MapActivity.this);
                         common.showAlertBox("Please Connect to internet", "Ok", "", MapActivity.this);
@@ -1116,6 +1207,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         currentLineNumber--;
                         drawLine();
                         fetchMarkerForLine(true);
+                        new DownloadKmlFile(getKmlFilePath(selectedWard, MapActivity.this)).execute();
                     } else {
                         common.closeDialog(MapActivity.this);
                         common.showAlertBox("Please Connect to internet", "Ok", "", MapActivity.this);
@@ -1219,6 +1311,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                             currentLineNumber = lineNumber - 1;
                                             drawLine();
                                             fetchMarkerForLine(true);
+                                            new DownloadKmlFile(getKmlFilePath(selectedWard, MapActivity.this)).execute();
                                         } else {
                                             common.closeDialog(MapActivity.this);
                                             common.showAlertBox("Please Connect to internet", "Ok", "", MapActivity.this);
