@@ -359,6 +359,9 @@ public class CommonFunctions {
             case"Tonk":
                 path ="https://dtdtonk.firebaseio.com/";
                 break;
+            case"Bhiwadi":
+                path ="https://dtdbhiwadi.firebaseio.com/";
+                break;
             case "Reengus":
                 path = "https://dtdreengus.firebaseio.com/";
                 break;
