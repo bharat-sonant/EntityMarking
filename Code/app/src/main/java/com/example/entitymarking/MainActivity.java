@@ -14,8 +14,10 @@ import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.ApiException;
@@ -31,12 +33,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     SharedPreferences dbPathSP;
     String userId, assignedWard;
     DatabaseReference rootRef;
+    String date,time,dt,city;
     CommonFunctions cmn = new CommonFunctions();
 
     @Override
@@ -44,22 +50,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbPathSP = getSharedPreferences("LoginDetails", MODE_PRIVATE);
+        date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+        time = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        dt = date+"/"+time;
         checkAlreadyLoggedIn();
     }
 
     private void checkAlreadyLoggedIn() {
         userId = dbPathSP.getString("userId", null);
+        city = dbPathSP.getString("storagePath", "");
         if (userId != null) {
             if (!userId.equals("0")) {
                 checkInternet();
                 return;
             }
         }
-        setDatabase("Bhiwadi");
+        setDatabase("Test");
     }
 
     @SuppressLint("StaticFieldLeak")
     private void checkInternet() {
+
         new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected void onPreExecute() {
@@ -102,81 +113,6 @@ public class MainActivity extends AppCompatActivity {
         loginIntent();
     }
 
-    private void checkWhetherLocationSettingsAreSatisfied() {
-        if (cmn.locationPermission(MainActivity.this)) {
-            LocationServices.getSettingsClient(this).checkLocationSettings(new LocationSettingsRequest.Builder()
-                    .addLocationRequest(new LocationRequest().setInterval(5000).setFastestInterval(1000).setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY))
-                    .setAlwaysShow(true).setNeedBle(true).build()).addOnCompleteListener(task1 -> {
-                try {
-                    task1.getResult(ApiException.class);
-                    if (task1.isSuccessful()) {
-                        getLocation();
-                    }
-                } catch (ApiException e) {
-                    if (e instanceof ResolvableApiException) {
-                        try {
-                            ResolvableApiException resolvable = (ResolvableApiException) e;
-                            resolvable.startResolutionForResult(MainActivity.this, 501);
-                        } catch (IntentSender.SendIntentException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                }
-            });
-        }
-    }
-
-    private void getLocation() {
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        LocationServices.getFusedLocationProviderClient(this).requestLocationUpdates(new LocationRequest().setInterval(5000).setFastestInterval(1000).setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY),
-                new LocationCallback() {
-                    @Override
-                    public void onLocationResult(@NonNull LocationResult locationResult) {
-                        super.onLocationResult(locationResult);
-                        Location finalLocation = locationResult.getLastLocation();
-                        LocationServices.getFusedLocationProviderClient(MainActivity.this).removeLocationUpdates(this);
-
-                        try {
-                            String address = String.valueOf(new Geocoder(MainActivity.this, Locale.getDefault())
-                                    .getFromLocation(finalLocation.getLatitude(), finalLocation.getLongitude(), 5)
-                                    .get(0)
-                                    .getLocality());
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, Looper.getMainLooper());
-    }
-
-    @Override
-    public void onRequestPermissionsResult(final int requestCode, @NonNull String[] permissions, @NonNull final int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 500 && grantResults.length > 0) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                MainActivity.this.checkWhetherLocationSettingsAreSatisfied();
-            } else {
-                finish();
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 501) {
-            if (resultCode == RESULT_OK) {
-                getLocation();
-            } else {
-                finish();
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     private void checkIsActive() {
         try {
             rootRef = cmn.getDatabaseRef(this);
@@ -186,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.getValue() != null) {
                                 if (Boolean.parseBoolean(String.valueOf(snapshot.getValue()))) {
+                                    Log.e("isActive"," user "+snapshot.getValue().toString());
                                     checkAssignedWard();
                                     return;
                                 }
@@ -210,7 +147,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         } catch (Exception e) {
-            e.printStackTrace();
+            Toast.makeText(MainActivity.this, "Please Contact to Admin", Toast.LENGTH_SHORT).show();
+            HashMap<String, Object> hM = new HashMap<>();
+            hM.put("ErrorDes",e.getMessage());
+            hM.put("AndroidVersion", Build.VERSION.RELEASE);
+            rootRef.child("ErrorLogs/EntityMarking/"+city+"/MainActivity/" +dt).updateChildren(hM);
         }
     }
 
@@ -247,7 +188,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         } catch (Exception e) {
-            e.printStackTrace();
+            Toast.makeText(MainActivity.this, "Please Contact to Admin", Toast.LENGTH_SHORT).show();
+            HashMap<String, Object> hM = new HashMap<>();
+            hM.put("ErrorDes",e.getMessage());
+            hM.put("AndroidVersion", Build.VERSION.RELEASE);
+            rootRef.child("ErrorLogs/EntityMarking/"+city+"/MainActivity/" +dt).updateChildren(hM);
         }
 
     }

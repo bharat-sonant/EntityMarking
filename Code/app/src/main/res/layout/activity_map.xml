@@ -34,53 +34,121 @@
         android:visibility="visible"
         tools:ignore="UselessParent">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/topLayout"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:orientation="horizontal"
-                android:weightSum="10">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentTop="true">
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="4dp"
-                    android:layout_weight="7"
-                    android:background="@drawable/line_change_background"
-                    android:elevation="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
                     android:orientation="horizontal"
-                    android:weightSum="6">
+                    android:weightSum="10">
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginRight="8dp"
-                        android:layout_weight="1"
-                        android:gravity="center">
+                        android:layout_margin="4dp"
+                        android:layout_weight="7"
+                        android:background="@drawable/line_change_background"
+                        android:elevation="10dp"
+                        android:orientation="horizontal"
+                        android:weightSum="6">
 
-                        <Button
-                            android:id="@+id/pre_line_btn"
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:background="@drawable/prev_line_icon"
-                            android:onClick="onPrevClick" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="8dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <Button
+                                android:id="@+id/pre_line_btn"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:background="@drawable/prev_line_icon"
+                                android:onClick="onPrevClick" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="2dp">
+
+                            <TextView
+                                android:id="@+id/current_line_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:gravity="center|bottom"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:gravity="top|center"
+                                android:text="@string/line_number"
+                                android:textColor="@color/dark_gray"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <Button
+                                android:id="@+id/next_line_btn"
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:background="@drawable/next_line_icon"
+                                android:onClick="onNextClick" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/gray" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/gray" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="4"
+                        android:layout_margin="4dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_weight="3"
+                        android:background="@drawable/line_change_background"
+                        android:elevation="10dp"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="2dp">
+                        android:weightSum="4">
 
                         <TextView
-                            android:id="@+id/current_line_tv"
+                            android:id="@+id/total_marks_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
@@ -94,61 +162,36 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
                             android:gravity="top|center"
-                            android:text="Line Number"
-                            android:textColor="#AAAAAA"
+                            android:text="@string/home"
+                            android:textColor="@color/dark_gray"
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="8dp"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <Button
-                            android:id="@+id/next_line_btn"
-                            android:layout_width="26dp"
-                            android:layout_height="26dp"
-                            android:background="@drawable/next_line_icon"
-                            android:onClick="onNextClick" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#DDDDDD" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#DDDDDD" />
-
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="55dp"
                     android:layout_margin="4dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_weight="3"
+                    android:layout_marginStart="8dp"
                     android:background="@drawable/line_change_background"
                     android:elevation="10dp"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:weightSum="4">
+                    android:padding="8dp"
+                    android:weightSum="4"
+                    android:visibility="gone">
 
                     <TextView
-                        android:id="@+id/total_marks_tv"
+                        android:id="@+id/date_and_time_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:gravity="center|bottom"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -156,8 +199,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
                         android:gravity="top|center"
-                        android:text="Home"
-                        android:textColor="#AAAAAA"
+                        android:text="@string/last_scan_time"
+                        android:textColor="@color/dark_gray"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -166,146 +209,69 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="55dp"
-                android:layout_margin="4dp"
-                android:layout_marginLeft="8dp"
-                android:background="@drawable/line_change_background"
-                android:elevation="10dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="8dp"
-                android:weightSum="4">
-
-                <TextView
-                    android:id="@+id/date_and_time_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:gravity="center|bottom"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:gravity="top|center"
-                    android:text="Last Scan Time"
-                    android:textColor="#AAAAAA"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@drawable/map_lower_screen_border"
-            android:elevation="10dp"
-            android:orientation="vertical"
-            android:paddingLeft="8dp"
-            android:paddingTop="16dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="16dp">
-
-            <LinearLayout
+                android:id="@+id/bottomLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/view_border"
-                android:gravity="center|left"
+                android:layout_gravity="bottom"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/map_lower_screen_border"
+                android:elevation="10dp"
                 android:orientation="vertical"
-                android:padding="4dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="16dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="16dp">
 
                 <LinearLayout
-                    android:id="@+id/is_surveyed_rg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/is_surveyed_true_rb"
+                    <Spinner
+                        android:id="@+id/house_type_spinner"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
                         android:layout_weight="1"
-                        android:text="Yes" />
-
-                    <RadioButton
-                        android:id="@+id/is_surveyed_false_rb"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="No" />
+                        android:background="@drawable/spinner_background_for_house_type" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/radio_group_heading_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Spinner
-                    android:id="@+id/house_type_spinner"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/spinner_background_for_house_type" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/etTotalHouse"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/view_border"
-                    android:ems="10"
-                    android:hint="@string/enter_total_houses"
-                    android:inputType="number"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:text=""
-                    android:visibility="gone"/>
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/etTotalHouse"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/view_border"
+                        android:ems="10"
+                        android:hint="@string/enter_total_houses"
+                        android:inputType="number"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/bottomLayout"
+                android:layout_below="@+id/topLayout" />
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="55dp"
-            android:layout_marginBottom="132dp">
-
-        </fragment>
+        </RelativeLayout>
 
     </FrameLayout>
 

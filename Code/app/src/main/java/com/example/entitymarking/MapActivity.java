@@ -112,6 +112,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -119,8 +120,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     ImageView imageViewForRejectedMarker;
     int currentLineNumber = 0;                      // use + 1 to get currentLine;
     Spinner houseTypeSpinner;
-    TextView currentLineTv, totalMarksTv, titleTv, rgHeadingTv, dateTimeTv;
-    RadioButton isSurveyedTrue, isSurveyedFalse;
+    TextView currentLineTv, totalMarksTv, titleTv, dateTimeTv;
     Bitmap photo;
     GoogleMap mMap;
     EditText edtTHouse;
@@ -178,9 +178,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         rootRef = common.getDatabaseRef(this);
         houseTypeSpinner = findViewById(R.id.house_type_spinner);
         totalMarksTv = findViewById(R.id.total_marks_tv);
-        rgHeadingTv = findViewById(R.id.radio_group_heading_tv);
-        isSurveyedTrue = findViewById(R.id.is_surveyed_true_rb);
-        isSurveyedFalse = findViewById(R.id.is_surveyed_false_rb);
         dateTimeTv = findViewById(R.id.date_and_time_tv);
         date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
@@ -189,10 +186,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         selectedCity = preferences.getString("storagePath", "");
         userId = preferences.getString("userId", "");
         cbText = preferences.getString("alreadyInstalledCbHeading", getResources().getString(R.string.already_installed_cb_text));
-        rgHeadingTv.setText(cbText);
-        setRB();
         if (selectedWard != null) {
-            common.setProgressDialog("Please Wait", "", MapActivity.this, MapActivity.this);
+            common.setProgressDialog("Please Wait.....", "", MapActivity.this, MapActivity.this);
             setPageTitle();
             fHouseTypeFromSto();
             fetchWardJson();
@@ -222,26 +217,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 return false;
             }
         });
-    }
-
-    private void setRB() {
-        isSurveyedFalse.setOnClickListener(view -> {
-            isSurveyedFalse.setChecked(true);
-            isSurveyedTrue.setChecked(false);
-        });
-        isSurveyedTrue.setOnClickListener(view -> {
-            isSurveyedFalse.setChecked(false);
-            isSurveyedTrue.setChecked(true);
-        });
-    }
-
-    private void setBothRBUnchecked() {
-        isSurveyedFalse.setChecked(false);
-        isSurveyedTrue.setChecked(false);
-    }
-
-    private boolean checkWhichRBisChecked() {
-        return isSurveyedTrue.isChecked();
     }
 
     @Override
@@ -422,6 +397,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     private void checkDate(String wardNo) {
+
         try {
             JSONArray jsonArray = new JSONArray(preferences.getString(preferences.getString("storagePath", "") + wardNo + "mapUpdateHistoryJson", ""));
             for (int i = jsonArray.length() - 1; i >= 0; i--) {
@@ -445,10 +421,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     private void fileMetaDownload(String dates, String wardNo) {
+
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         storageReference.child(preferences.getString("storagePath", "") + "/WardLinesHouseJson/" + wardNo + "/" + dates + ".json").getMetadata().addOnSuccessListener(storageMetadata -> {
             long fileCreationTime = storageMetadata.getCreationTimeMillis();
@@ -485,6 +463,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void prepareDB() {
+
         try {
             JSONObject wardJSONObject = new JSONObject(common.getDatabaseSp(MapActivity.this).getString("wardJSON", ""));
             Iterator<String> keys = wardJSONObject.keys();
@@ -517,9 +496,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     private void prepareWardBoundary() {
+
         try {
             JSONObject wardJSONObject = new JSONObject(preferences.getString("BoundaryJson", ""));
             Log.e("wardJSONObject size", wardJSONObject.length() + "");
@@ -552,9 +533,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     private void celForLine() {
+
         cELOnLine = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -603,6 +586,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onCancelled(@NonNull DatabaseError error) {
             }
         };
+
     }
 
     private boolean isRejectedMarker(DataSnapshot snapshot) {
@@ -614,6 +598,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @SuppressLint("SetTextI18n")
     private void fetchMarkerForLine(boolean isCloseProgressDialog) {
+
         totalMarksTv.setText("" + 0);
         mDMMap = new HashMap<>();
         enableZoom = true;
@@ -627,7 +612,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void mainCheckLocationForRealTimeRequest() {
+
         if (common.locationPermission(MapActivity.this)) {
+
             LocationServices.getSettingsClient(this).checkLocationSettings(new LocationSettingsRequest.Builder()
                     .addLocationRequest(new LocationRequest().setInterval(5000).setFastestInterval(1000).setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY))
                     .setAlwaysShow(true).setNeedBle(true).build()).addOnCompleteListener(task1 -> {
@@ -674,6 +661,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void pickLocForEntity() {
+
         common.closeDialog(MapActivity.this);
         if (lastKnownLatLngForWalkingMan != null) {
             updateMarksCount();
@@ -684,6 +672,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @SuppressLint("StaticFieldLeak")
     private void updateMarksCount() {
+
         View dialogLayout = MapActivity.this.getLayoutInflater().inflate(R.layout.custom_image_preview, null);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MapActivity.this).setView(dialogLayout).setCancelable(false);
         AlertDialog dialog = alertDialog.create();
@@ -728,7 +717,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Button closeBtn = dialogLayout.findViewById(R.id.close_preview_image_btn);
         closeBtn.setOnClickListener(v -> {
             houseTypeSpinner.setSelection(0);
-            setBothRBUnchecked();
             dialog.dismiss();
         });
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -740,6 +728,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @SuppressLint({"SimpleDateFormat", "SetTextI18n"})
     private void saveMarkedLocationAndUploadPhoto() {
+
         if (photo != null) {
             common.closeDialog(MapActivity.this);
             common.setProgressDialog("", "Saving data", MapActivity.this, MapActivity.this);
@@ -765,7 +754,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     HashMap<String, Object> hM = new HashMap<>();
                                     hM.put("latLng", lastKnownLatLngForWalkingMan.latitude + "," + lastKnownLatLngForWalkingMan.longitude);
                                     hM.put("userId", userId);
-                                    hM.put("alreadyInstalled", checkWhichRBisChecked());
+                                    hM.put("alreadyInstalled", "");
                                     hM.put("image", MARKS_COUNT + ".jpg");
                                     hM.put("date", new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date()));
                                     hM.put("houseType", houseDataHashMap.get(houseTypeSpinner.getSelectedItem()));
@@ -781,14 +770,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     common.increaseCountByOne(rootRef.child("EntityMarkingData/MarkingSurveyData/Employee/DateWise/" + date + "/totalMarked"));
                                     common.increaseCountByOne(rootRef.child("EntityMarkingData/MarkingSurveyData/WardSurveyData/DateWise/" + date + "/totalMarked"));
                                     common.increaseCountByOne(rootRef.child("EntityMarkingData/MarkingSurveyData/WardSurveyData/WardWise/" + selectedWard + "/marked"));
-                                    if (checkWhichRBisChecked()) {
-                                        common.increaseCountByOne(rootRef.child("EntityMarkingData/MarkingSurveyData/WardSurveyData/WardWise/" + selectedWard + "/alreadyInstalled"));
-                                        common.increaseCountByOne(rootRef.child("EntityMarkingData/MarkedHouses/" + selectedWard + "/" + (currentLineNumber + 1)).child("alreadyInstalledCount"));
-                                    }
                                     houseTypeSpinner.setSelection(0);
                                     edtTHouse.setText("");
                                     edtTHouse.setVisibility(View.GONE);
-                                    setBothRBUnchecked();
                                     dateTimeTv.setText(new SimpleDateFormat("dd MMM HH:mm:ss").format(new Date()));
 
 
@@ -827,6 +811,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void startCaptureLocForWalkingMan() {
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -872,6 +857,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void timerForWalkingMan() {
+
         cdTimer = new CountDownTimer(2000, 1000) {
             @Override
             public void onTick(long l) {
@@ -887,6 +873,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @SuppressLint("SetTextI18n")
     private void drawLine() {
+
         mMap.clear();
         boolToInstantiateMovingMarker = true;
         currentLineTv.setText("" + (currentLineNumber + 1) + " / " + dbColl.size());
@@ -901,6 +888,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void drawAllLine() {
+
         for (int i = 0; i < dbColl.size(); i++) {
             if (currentLineNumber != i) {
                 mMap.addPolyline(new PolylineOptions().addAll(dbColl.get(i))
@@ -916,21 +904,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private void drawBoundary() {
 //        mMap.clear();
 //        boolToInstantiateMovingMarker = true;
-        Log.e("wardBoundaryColl",wardBoundaryColl.size()+"");
+        Log.e("wardBoundaryColl", wardBoundaryColl.size() + "");
         for (int i = 0; i < wardBoundaryColl.size(); i++) {
 //            if (currentLineNumber != i) {
-                Log.e("wardBoundaryColl enter",wardBoundaryColl.get(i)+"");
-                mMap.addPolyline(new PolylineOptions().addAll(wardBoundaryColl.get(i))
-                        .startCap(new RoundCap())
-                        .endCap(new RoundCap())
-                        .color(Color.parseColor("#000000"))
-                        .jointType(JointType.ROUND)
-                        .width(6));
+            Log.e("wardBoundaryColl enter", wardBoundaryColl.get(i) + "");
+            mMap.addPolyline(new PolylineOptions().addAll(wardBoundaryColl.get(i))
+                    .startCap(new RoundCap())
+                    .endCap(new RoundCap())
+                    .color(Color.parseColor("#000000"))
+                    .jointType(JointType.ROUND)
+                    .width(6));
 //            }
         }
     }
 
     private void openCam() {
+
         new Handler().post(() -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (MapActivity.this.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -950,7 +939,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (parameters.getMaxNumMeteringAreas() > 0) {
                     parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
                     Rect rect = calculateFocusArea(event.getX(), event.getY());
-                    List<Camera.Area> meteringAreas = new ArrayList<Camera.Area>();
+                    List<Camera.Area> meteringAreas = new ArrayList<>();
                     meteringAreas.add(new Camera.Area(rect, 800));
                     parameters.setFocusAreas(meteringAreas);
                     mCamera.setParameters(parameters);
@@ -967,13 +956,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private Rect calculateFocusArea(float x, float y) {
+
         int left = clamp(Float.valueOf((x / surfaceView.getWidth()) * 2000 - 1000).intValue());
         int top = clamp(Float.valueOf((y / surfaceView.getHeight()) * 2000 - 1000).intValue());
-
         return new Rect(left, top, left + FOCUS_AREA_SIZE, top + FOCUS_AREA_SIZE);
+
     }
 
     private int clamp(int touchCoordinateInCameraReper) {
+
         int result;
         if (Math.abs(touchCoordinateInCameraReper) + MapActivity.FOCUS_AREA_SIZE / 2 > 1000) {
             if (touchCoordinateInCameraReper > 0) {
@@ -988,11 +979,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public static void setCameraDisplayOrientation(Activity activity, int cameraId, android.hardware.Camera camera) {
-        android.hardware.Camera.CameraInfo info =
-                new android.hardware.Camera.CameraInfo();
+
+        android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(cameraId, info);
-        int rotation = activity.getWindowManager().getDefaultDisplay()
-                .getRotation();
+        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
         switch (rotation) {
             case Surface.ROTATION_0:
@@ -1010,7 +1000,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
         int result;
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+        if (info.facing == CAMERA_FACING_FRONT) {
             result = (info.orientation + degrees) % 360;
             result = (360 - result) % 360;  // compensate the mirror
         } else {  // back-facing
@@ -1021,10 +1011,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @SuppressLint("ClickableViewAccessibility")
     public void showAlertDialog() {
+
         View dialogLayout = MapActivity.this.getLayoutInflater().inflate(R.layout.custom_camera_alertbox, null);
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MapActivity.this).setView(dialogLayout).setCancelable(false);
         AlertDialog dialog = alertDialog.create();
-        surfaceView = (SurfaceView) dialogLayout.findViewById(R.id.surfaceViews);
+        surfaceView = dialogLayout.findViewById(R.id.surfaceViews);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_HARDWARE);
         SurfaceHolder.Callback surfaceViewCallBack = new SurfaceHolder.Callback() {
@@ -1071,7 +1062,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             closeBtn.setOnClickListener(v -> {
                 isEdit = false;
                 houseTypeSpinner.setSelection(0);
-                setBothRBUnchecked();
                 dialog.cancel();
                 isPass = true;
             });
@@ -1159,25 +1149,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onSaveClick(View view) {
         if (isPass) {
             isPass = false;
-            if (isSurveyedTrue.isChecked() || isSurveyedFalse.isChecked()) {
-                if (edtTHouse.getVisibility() == View.VISIBLE) {
-                    if (!edtTHouse.getText().toString().equals("")) {
-                        int length = Integer.parseInt(edtTHouse.getText().toString());
+            if (edtTHouse.getVisibility() == View.VISIBLE) {
+                if (!edtTHouse.getText().toString().equals("")) {
+                    int length = Integer.parseInt(edtTHouse.getText().toString());
 
-                    } else {
-//                        houseTypeSpinner.setSelection(0);
-                        isPass = true;
-//                        common.showAlertBox("Please Enter Total Number of Houses greater than one", "ok", "", MapActivity.this);
-                    }
                 } else {
-                    checkGpsForEntity();
+//                        houseTypeSpinner.setSelection(0);
+                    isPass = true;
+//                        common.showAlertBox("Please Enter Total Number of Houses greater than one", "ok", "", MapActivity.this);
                 }
             } else {
-                isPass = true;
-                setBothRBUnchecked();
-                houseTypeSpinner.setSelection(0);
-                common.showAlertBox("Please Select yes or no option", "ok", "", MapActivity.this);
+                checkGpsForEntity();
             }
+
         }
     }
 
@@ -1528,7 +1512,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startCaptureLocForWalkingMan();
                 } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission denieddd", Toast.LENGTH_SHORT).show();
+                    startCaptureLocForWalkingMan();
                 }
             }
 
@@ -1537,9 +1522,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     showAlertDialog();
                 } else {
                     houseTypeSpinner.setSelection(0);
-                    setBothRBUnchecked();
                     isPass = true;
                     Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    mainCheckLocationForRealTimeRequest();
                 }
             }
         } catch (Exception e) {
@@ -1557,21 +1542,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 } else {
                     isPass = true;
                     houseTypeSpinner.setSelection(0);
-                    setBothRBUnchecked();
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission deniede", Toast.LENGTH_SHORT).show();
                 }
             } else if (requestCode == MAIN_LOC_REQUEST) {
                 if (resultCode == RESULT_OK) {
                     startCaptureLocForWalkingMan();
                 } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission deniedi", Toast.LENGTH_SHORT).show();
                     mainCheckLocationForRealTimeRequest();
                 }
             } else if (requestCode == GPS_CODE_FOR_MODIFICATION) {
                 if (resultCode == RESULT_OK) {
 
                 } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission deniedw", Toast.LENGTH_SHORT).show();
                 }
             }
         } catch (Exception e) {
@@ -1621,6 +1605,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void lastScanTimeVEL() {
+
         rootRef.child("EntityMarkingData/LastScanTime/Surveyor/" + userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
