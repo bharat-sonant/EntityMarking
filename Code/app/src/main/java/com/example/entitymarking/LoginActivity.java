@@ -160,12 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         } catch (Exception e) {
                             Log.e("exception e", e.getMessage());
-                            Toast.makeText(LoginActivity.this, "Please Contact to Admin", Toast.LENGTH_SHORT).show();
-                            HashMap<String, Object> hM = new HashMap<>();
-                            hM.put("ErrorDes",e.getMessage());
-                            hM.put("AndroidVersion", Build.VERSION.RELEASE);
-                            rootRef.child("ErrorLogs/EntityMarking/"+city+"/LoginPage/" +dt).updateChildren(hM);
-
+                            errorLog(e);
                         }
                     } else {
                         isPass = true;
@@ -177,11 +172,19 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
+                    common.closeDialog(LoginActivity.this);
+                    Toast.makeText(LoginActivity.this, "Please Contact to Admin", Toast.LENGTH_SHORT).show();
                 }
             });
         }
     }
 
+    private void errorLog(Exception e){
+        Toast.makeText(LoginActivity.this, "Please Contact to Admin", Toast.LENGTH_SHORT).show();
+        HashMap<String, Object> hM = new HashMap<>();
+        hM.put("ErrorDes",e.getMessage());
+        hM.put("AndroidVersion", Build.VERSION.RELEASE);
+        rootRef.child("ErrorLogs/EntityMarking/"+city+"/LoginPage/" +dt).updateChildren(hM);
+    }
 
 }

@@ -147,11 +147,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         } catch (Exception e) {
-            Toast.makeText(MainActivity.this, "Please Contact to Admin", Toast.LENGTH_SHORT).show();
-            HashMap<String, Object> hM = new HashMap<>();
-            hM.put("ErrorDes",e.getMessage());
-            hM.put("AndroidVersion", Build.VERSION.RELEASE);
-            rootRef.child("ErrorLogs/EntityMarking/"+city+"/MainActivity/" +dt).updateChildren(hM);
+            errorLog(e);
         }
     }
 
@@ -188,15 +184,19 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         } catch (Exception e) {
-            Toast.makeText(MainActivity.this, "Please Contact to Admin", Toast.LENGTH_SHORT).show();
-            HashMap<String, Object> hM = new HashMap<>();
-            hM.put("ErrorDes",e.getMessage());
-            hM.put("AndroidVersion", Build.VERSION.RELEASE);
-            rootRef.child("ErrorLogs/EntityMarking/"+city+"/MainActivity/" +dt).updateChildren(hM);
+            errorLog(e);
         }
 
     }
 
+    private void errorLog(Exception e){
+
+        Toast.makeText(MainActivity.this, "Please Contact to Admin", Toast.LENGTH_SHORT).show();
+        HashMap<String, Object> hM = new HashMap<>();
+        hM.put("ErrorDes",e.getMessage());
+        hM.put("AndroidVersion", Build.VERSION.RELEASE);
+        rootRef.child("ErrorLogs/EntityMarking/"+city+"/MainActivity/" +dt).updateChildren(hM);
+    }
     private void loginIntent() {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
