@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void inIt() {
+
         userIdEt = findViewById(R.id.username);
         userLayout = findViewById(R.id.userUsername);
         userPassWordEt = findViewById(R.id.password);

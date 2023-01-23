@@ -280,6 +280,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     });
                         } catch (IOException e) {
                             e.printStackTrace();
+                            Log.e("exce",e.getMessage());
                         }
 
                     } else {
@@ -360,6 +361,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         checkDate(selectedWard);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Log.e("exce",e.getMessage());
                     }
                 });
             } else {
@@ -386,6 +388,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         prepareWardBoundary();
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Log.e("exce",e.getMessage());
                     }
                 });
             } else {
@@ -427,6 +430,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @RequiresApi(api = Build.VERSION_CODES.P)
     private void fileMetaDownload(String dates, String wardNo) {
 
+        Log.e("date",dates);
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         storageReference.child(preferences.getString("storagePath", "") + "/WardLinesHouseJson/" + wardNo + "/" + dates + ".json").getMetadata().addOnSuccessListener(storageMetadata -> {
             long fileCreationTime = storageMetadata.getCreationTimeMillis();
@@ -551,7 +555,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         double lng = Double.parseDouble(tempStr[1]);
 
                         if (isRejectedMarker(snapshot)) {
-                            mDMMap.put(new LatLng(lat, lng), new MarkersDataModel((Boolean) snapshot.child("alreadyInstalled").getValue(),
+                            mDMMap.put(new LatLng(lat, lng), new MarkersDataModel(Boolean.parseBoolean(snapshot.child("alreadyInstalled").getValue().toString()),
                                     (Boolean) isRejectedMarker(snapshot),
                                     String.valueOf(snapshot.child("date").getValue()),
                                     (String) snapshot.child("image").getValue(),
@@ -877,14 +881,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap.clear();
         boolToInstantiateMovingMarker = true;
         currentLineTv.setText("" + (currentLineNumber + 1) + " / " + dbColl.size());
-        drawAllLine();
-        drawBoundary();
-        mMap.addPolyline(new PolylineOptions().addAll(dbColl.get(currentLineNumber))
-                .endCap(new CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.upper60), 30))
-                .startCap(new CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.start50), 30))
-                .color(0xff000000)
-                .jointType(JointType.ROUND)
-                .width(8));
+        try {
+            drawAllLine();
+            drawBoundary();
+            mMap.addPolyline(new PolylineOptions().addAll(dbColl.get(currentLineNumber))
+                    .endCap(new CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.upper60), 30))
+                    .startCap(new CustomCap(BitmapDescriptorFactory.fromResource(R.drawable.start50), 30))
+                    .color(0xff000000)
+                    .jointType(JointType.ROUND)
+                    .width(8));
+        }catch (Exception e){
+            Log.e("exce",e.getMessage());
+        }
     }
 
     private void drawAllLine() {
@@ -1591,6 +1599,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         alertDialog.show();
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Log.e("exce",e.getMessage());
                     }
 
                 }
@@ -1646,6 +1655,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         }
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
+                        Log.e("exce",e.getMessage());
                     }
 
                 } else {
