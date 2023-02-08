@@ -10,5 +10,6 @@
     <string name="line_number">Line Number</string>
     <string name="home">Home</string>
     <string name="last_scan_time">Last Scan Time</string>
+    <string name="maps">Maps</string>
 </resources>
 

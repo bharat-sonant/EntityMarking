@@ -19,7 +19,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
@@ -41,8 +40,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -388,6 +385,12 @@ public class CommonFunctions {
                 break;
             case "Behror":
                 path = "https://dtdbehror.firebaseio.com/";
+                break;
+            case "Ratangarh":
+                path = "https://dtdratangarh.firebaseio.com/";
+                break;
+            case "Nokha":
+                path = "https://dtdnokha.firebaseio.com/";
                 break;
             default:
                 path = "https://dtdnavigator.firebaseio.com/";

@@ -20,8 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Maps"
-            android:textColor="#fff"
+            android:text="@string/maps"
+            android:textColor="@color/white"
             android:textSize="22dp" />
 
     </androidx.appcompat.widget.Toolbar>
