@@ -765,6 +765,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                                     hM.put("totalHouses", edtTHouse.getText().toString());
                                     rootRef.child("EntityMarkingData/MarkedHouses/" + selectedWard + "/" + (currentLineNumber + 1) + "/" + MARKS_COUNT).setValue(hM);
                                     rootRef.child("EntityMarkingData/LastScanTime/Surveyor").child(userId).setValue(new SimpleDateFormat("dd MMM HH:mm:ss").format(new Date()));
+                                    rootRef.child("EntityMarkingData/SurveyorLastLocation").child(userId).setValue(lastKnownLatLngForWalkingMan.latitude+","+lastKnownLatLngForWalkingMan.longitude);
                                     rootRef.child("EntityMarkingData/LastScanTime/Ward").child(selectedWard).setValue(new SimpleDateFormat("dd MMM HH:mm:ss").format(new Date()));
                                     common.increaseCountByOne(rootRef.child("EntityMarkingData/MarkingSurveyData/Employee/DateWise/" + date + "/" + userId + "/marked"));
                                     common.increaseCountByOne(rootRef.child("EntityMarkingData/MarkedHouses/" + selectedWard + "/" + (currentLineNumber + 1)).child("marksCount"));
