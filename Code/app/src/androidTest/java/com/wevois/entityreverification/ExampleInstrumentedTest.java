@@ -1,4 +1,4 @@
-package com.example.entitymarking;
+package com.wevois.entityreverification;
 
 import android.content.Context;
 

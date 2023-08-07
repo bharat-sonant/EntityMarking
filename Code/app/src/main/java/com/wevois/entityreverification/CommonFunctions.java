@@ -1,4 +1,4 @@
-package com.example.entitymarking;
+package com.wevois.entityreverification;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -19,6 +19,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
@@ -69,7 +70,8 @@ public class CommonFunctions {
     }
 
     public StorageReference getDatabaseStoragePath(Context context) {
-        return FirebaseStorage.getInstance().getReferenceFromUrl("gs://dtdnavigator.appspot.com/" + getDatabaseSp(context).getString("storagePath", " "));
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        return storage.getReferenceFromUrl("gs://entity-verification.appspot.com/"+getDatabaseSp(context).getString("city", " "));
     }
 
     private SharedPreferences getSp(Context context) {
@@ -123,8 +125,10 @@ public class CommonFunctions {
             if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 context.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST);
                 st = false;
+                Log.e("permission","grant");
             } else {
                 st = true;
+                Log.e("permission","not  grant");
             }
         }
         return st;
@@ -171,19 +175,19 @@ public class CommonFunctions {
         previousLatLng = currentLatLng;
 
         markerManOne = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.man1)));
+                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.ic_baseline_my_location_24)));
         markerManTwo = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.man2)));
+                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.ic_baseline_my_location_24)));
         markerManThree = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.man3)));
+                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.ic_baseline_my_location_24)));
         markerManFour = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.man4)));
+                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.ic_baseline_my_location_24)));
         markerManFive = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.man5)));
+                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.ic_baseline_my_location_24)));
         markerManSix = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.man6)));
+                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.ic_baseline_my_location_24)));
         markerManStop = mMap.addMarker(new MarkerOptions().position(currentLatLng)
-                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.manstop)));
+                .icon(BitmapFromVector(context.getApplicationContext(), R.drawable.ic_baseline_my_location_24)));
 
         setOneToSixMarkerInvisible();
     }
@@ -316,7 +320,7 @@ public class CommonFunctions {
     }
 
     public void mFetchAlreadyInstalledCBHeading(Context context) {
-        FirebaseStorage.getInstance().getReferenceFromUrl("gs://dtdnavigator.appspot.com/Common/EntityMarkingData/alreadyInstalledCheckBoxText.json")
+        FirebaseStorage.getInstance().getReferenceFromUrl("gs://entity-verification.appspot.com/Common/EntityMarkingData/alreadyInstalledCheckBoxText.json")
                 .getMetadata().addOnSuccessListener(storageMetadata -> {
             long serverUpdation = storageMetadata.getCreationTimeMillis();
             long localUpdation = getDatabaseSp(context).getLong("alreadyInstalledLastUpdate", 0);
@@ -324,7 +328,7 @@ public class CommonFunctions {
                 getDatabaseSp(context).edit().putLong("alreadyInstalledLastUpdate", serverUpdation).apply();
                 try {
                     File local = File.createTempFile("temp", "txt");
-                    FirebaseStorage.getInstance().getReferenceFromUrl("gs://dtdnavigator.appspot.com/Common/EntityMarkingData/alreadyInstalledCheckBoxText.json")
+                    FirebaseStorage.getInstance().getReferenceFromUrl("gs://entity-verification.appspot.com/Common/EntityMarkingData/alreadyInstalledCheckBoxText.json")
                             .getFile(local).addOnCompleteListener(task -> {
                         try {
                             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(local)));
@@ -350,50 +354,14 @@ public class CommonFunctions {
     public String getDatabase(String city) {
         String path;
         switch (city) {
-            case "Test":
-                path = "https://dtdnavigatortesting.firebaseio.com/";
+            case "Malviyanagar":
+                path = "https://malviyanagar.firebaseio.com/";
                 break;
-            case"Tonk":
-                path ="https://dtdtonk.firebaseio.com/";
-                break;
-            case"Bhiwadi":
-                path ="https://dtdbhiwadi.firebaseio.com/";
-                break;
-            case "Reengus":
-                path = "https://dtdreengus.firebaseio.com/";
-                break;
-            case "Shahpura":
-                path = "https://dtdshahpura.firebaseio.com/";
-                break;
-            case "Jaipur":
-                path = "https://dtdjaipur.firebaseio.com/";
-                break;
-            case "Kishangarh":
-                path = "https://dtdkishangarh.firebaseio.com/";
-                break;
-            case "Jaisalmer":
-                path = "https://dtdjaisalmer.firebaseio.com/";
-                break;
-            case "Niwai":
-                path = "https://dtdniwai.firebaseio.com/";
-                break;
-            case "Jaipur-Malviyanagar":
-                path = "https://jaipur-malviyanagar.firebaseio.com/";
-                break;
-            case "Jaipur-Murlipura":
-                path = "https://jaipur-murlipura.firebaseio.com/";
-                break;
-            case "Behror":
-                path = "https://dtdbehror.firebaseio.com/";
-                break;
-            case "Ratangarh":
-                path = "https://dtdratangarh.firebaseio.com/";
-                break;
-            case "Nokha":
-                path = "https://dtdnokha.firebaseio.com/";
+            case "Murlipura":
+                path = "https://murlipura.firebaseio.com/";
                 break;
             default:
-                path = "https://dtdnavigator.firebaseio.com/";
+                path = "https://murlipura.firebaseio.com/";
                 break;
         }
         return path;

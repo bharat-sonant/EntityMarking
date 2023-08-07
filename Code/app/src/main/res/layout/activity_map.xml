@@ -13,16 +13,17 @@
         android:layout_height="55dp"
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:titleTextColor="#fff">
 
         <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
             android:text="@string/maps"
             android:textColor="@color/white"
-            android:textSize="22dp" />
+            android:textSize="20sp" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -42,8 +43,8 @@
                 android:id="@+id/topLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_alignParentTop="true">
+                android:layout_alignParentTop="true"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -55,7 +56,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_margin="4dp"
-                        android:layout_weight="7"
+                        android:layout_weight="07"
                         android:background="@drawable/line_change_background"
                         android:elevation="10dp"
                         android:orientation="horizontal"
@@ -123,16 +124,6 @@
 
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray" />
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:background="@color/gray" />
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -140,11 +131,12 @@
                         android:layout_height="match_parent"
                         android:layout_margin="4dp"
                         android:layout_marginStart="8dp"
-                        android:layout_weight="3"
+                        android:layout_weight="03"
                         android:background="@drawable/line_change_background"
                         android:elevation="10dp"
                         android:gravity="center"
                         android:orientation="vertical"
+                        android:visibility="visible"
                         android:weightSum="4">
 
                         <TextView
@@ -181,8 +173,8 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="8dp"
-                    android:weightSum="4"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    android:weightSum="4">
 
                     <TextView
                         android:id="@+id/date_and_time_tv"
@@ -212,54 +204,37 @@
                 android:id="@+id/bottomLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/map_lower_screen_border"
-                android:elevation="10dp"
-                android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingTop="16dp"
-                android:paddingRight="8dp"
-                android:paddingBottom="16dp">
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/img_entity"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_baseline_photo_camera_24" />
+
+                <TextView
+                    android:id="@+id/entity_image_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <Spinner
-                        android:id="@+id/house_type_spinner"
-                        android:layout_width="0dp"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/spinner_background_for_house_type" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/etTotalHouse"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/view_border"
-                        android:ems="10"
-                        android:hint="@string/enter_total_houses"
-                        android:inputType="number"
-                        android:paddingLeft="20dp"
-                        android:paddingRight="20dp"
-                        android:visibility="gone" />
-
-                </LinearLayout>
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="top|center"
+                    android:text="@string/entity_image"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

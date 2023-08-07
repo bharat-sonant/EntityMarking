@@ -1,4 +1,4 @@
-package com.example.entitymarking;
+package com.wevois.entityreverification;
 
 public class MarkersDataModel {
     boolean isAlreadyInstalled;

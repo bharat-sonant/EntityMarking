@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Entity Marking</string>
+    <string name="app_name">Entity Reverification</string>
     <string name="title_activity_maps">Map</string>
     <string name="select_city_activity_label">Select City</string>
     <string name="sikar_btn_label">Sikar</string>
@@ -11,5 +11,18 @@
     <string name="home">Home</string>
     <string name="last_scan_time">Last Scan Time</string>
     <string name="maps">Maps</string>
+    <string name="card_allready_install">क्या कार्ड पहले से ही लगा हुआ है?</string>
+    <string name="entity_image">कृप्या Entity की इमेज लेंवे</string>
+    <string name="enter_card_no">Enter card number</string>
+    <string name="login">LogIn</string>
+    <string name="proceed_to_save">Proceed to save</string>
+    <string name="cancel">Cancel</string>
+    <string name="proceed">Proceed</string>
+    <string name="submit">submit</string>
+    <string name="entity_detail">Entity Detail</string>
+    <string name="entity_type">Entity type</string>
+    <string name="verifier_entity_type">Verifier entity type</string>
+    <string name="enter_entity_count">Enter entity count</string>
+    <string name="btn_continue">continue</string>
 </resources>
 

@@ -6,14 +6,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@color/gray">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
-        android:background="@drawable/below_toolbar_drawble"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -22,7 +22,8 @@
             android:layout_height="wrap_content"
             android:padding="08dp"
             android:scaleType="fitXY"
-            android:src="@drawable/login_icon" />
+            android:src="@drawable/login_icon"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/screen_title"
@@ -30,9 +31,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-condensed"
-            android:text="Login"
-            android:textColor="@color/white"
-            android:textSize="18dp"
+            android:text="@string/login"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="25sp"
             android:textStyle="bold" />
 
         <TextView
@@ -45,8 +46,8 @@
             android:padding="05dp"
             android:text="@string/app_name"
             android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
     </LinearLayout>
@@ -90,7 +91,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="User Name"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:fontFamily="sans-serif-condensed"
                     android:textStyle="bold"/>
             </com.google.android.material.textfield.TextInputLayout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical"
     android:weightSum="100"
@@ -16,6 +16,6 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/splash_screen_icon" />
+        app:srcCompat="@drawable/entity_reverifition_logo" />
 
 </LinearLayout>

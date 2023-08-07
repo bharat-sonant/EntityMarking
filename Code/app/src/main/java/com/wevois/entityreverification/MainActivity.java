@@ -1,4 +1,4 @@
-package com.example.entitymarking;
+package com.wevois.entityreverification;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dbPathSP = getSharedPreferences("LoginDetails", MODE_PRIVATE);
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         time = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         dt = date+"/"+time;
         checkAlreadyLoggedIn();
+//        mapIntent();
     }
 
     private void checkAlreadyLoggedIn() {
@@ -49,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
                 checkInternet();
                 return;
             }
+        }else {
+            loginIntent();
         }
-        setDatabase("Ratangarh");
+//        setDatabase("Malviyanagar");
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -70,7 +74,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Boolean result) {
                 if (result) {
-                    checkIsActive();
+                    String ward  = dbPathSP.getString("ward","");
+                    Log.e("EntityRV","ward"+ward);
+                    if (!ward.isEmpty())
+                        mapIntent();
+                    else
+                        wardIntent();
 
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -95,45 +104,8 @@ public class MainActivity extends AppCompatActivity {
         String path = cmn.getDatabase(city);
         dbPathSP.edit().putString("dbPath", path).apply();
         dbPathSP.edit().putString("storagePath", city).apply();
+        dbPathSP.edit().putString("prefix", "MNZ").apply();
         loginIntent();
-    }
-
-    private void checkIsActive() {
-        try {
-            rootRef = cmn.getDatabaseRef(this);
-            rootRef.child("EntityMarkingData/MarkerAppAccess/" + userId + "/isActive/")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.getValue() != null) {
-                                if (Boolean.parseBoolean(String.valueOf(snapshot.getValue()))) {
-                                    Log.e("isActive"," user "+snapshot.getValue().toString());
-                                    checkAssignedWard();
-                                    return;
-                                }
-                            }
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                            builder.setMessage("Access Denied").setCancelable(false)
-                                    .setPositiveButton("ok", (dialog, id) -> {
-                                        finish();
-                                        dialog.cancel();
-                                    })
-                                    .setNegativeButton("", (dialog, i) -> finish());
-                            AlertDialog alertDialog = builder.create();
-                            alertDialog.show();
-
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-        } catch (Exception e) {
-            errorLog(e);
-        }
     }
 
     private void checkAssignedWard() {
@@ -190,6 +162,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void mapIntent() {
         Intent intent = new Intent(MainActivity.this, MapActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void wardIntent() {
+        Intent intent = new Intent(MainActivity.this, SelectWardActivity.class);
         startActivity(intent);
         finish();
     }

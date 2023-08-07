@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
@@ -48,6 +47,7 @@
         <entry key="..\:/Office-Work/Projects/EntityMarking/Code/app/src/main/res/layout/move_to_line_view.xml" value="0.21041666666666667" />
         <entry key="..\:/Office-Work/Projects/EntityMarking/Code/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1925925925925926" />
         <entry key="..\:/Office_AndroidNativeProject/EntityMarking/Code/app/src/main/res/drawable/rounded_button.xml" value="0.145" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityMarking/Code/app/src/main/res/drawable/spinner_background_for_house_type.xml" value="0.145" />
         <entry key="..\:/Office_AndroidNativeProject/EntityMarking/Code/app/src/main/res/font/fonts.xml" value="0.26851851851851855" />
         <entry key="..\:/Office_AndroidNativeProject/EntityMarking/Code/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Office_AndroidNativeProject/EntityMarking/Code/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
@@ -55,6 +55,33 @@
         <entry key="..\:/Office_AndroidNativeProject/EntityMarking/Code/app/src/main/res/layout/custom_camera_alertbox.xml" value="0.25416666666666665" />
         <entry key="..\:/Office_AndroidNativeProject/EntityMarking/Code/app/src/main/res/layout/custom_image_preview.xml" value="0.25416666666666665" />
         <entry key="..\:/Office_AndroidNativeProject/EntityMarking/Code/app/src/main/res/layout/form_dialog_for_rejected_marker.xml" value="0.25416666666666665" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/below_toolbar_drawble.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/borderofcardno.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/cardnobackground.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/corner_round.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/ic_baseline_photo_camera_24.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/ic_lock.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/line_change_background.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/lower_corner.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/next_line_icon.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/prev_line_icon.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/rounded_button.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/spinner_background_for_house_type.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/drawable/top_corner.xml" value="0.1585" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/activity_login.xml" value="0.24615384615384617" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/activity_main.xml" value="0.24615384615384617" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/activity_map.xml" value="0.24615384615384617" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/activity_maps.xml" value="0.25" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/card_detail_layout.xml" value="0.24895833333333334" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/card_detail_not_found_layout.xml" value="0.24895833333333334" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/custom_camera_alertbox.xml" value="0.25" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/custom_image_preview.xml" value="0.24615384615384617" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/entity_info_layout.xml" value="0.24895833333333334" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/form_dialog_for_rejected_marker.xml" value="0.24615384615384617" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/move_to_line_view.xml" value="0.25" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/select_ward_layout.xml" value="0.24895833333333334" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/layout/wrd_name_listview_layout.xml" value="0.25" />
+        <entry key="..\:/Office_AndroidNativeProject/EntityReverification/Code/app/src/main/res/menu/map_activity_menu.xml" value="0.25" />
         <entry key="..\:/Projects/EntityMarkingApp/Code/app/src/main/res/layout/activity_main.xml" value="0.24003623188405798" />
         <entry key="..\:/Projects/EntityMarkingApp/Code/app/src/main/res/layout/activity_map.xml" value="0.16576086956521738" />
         <entry key="..\:/Projects/EntityMarkingApp/Code/app/src/main/res/layout/move_to_line_view.xml" value="0.25416666666666665" />
@@ -106,7 +133,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="jbr-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
