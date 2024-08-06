@@ -171,8 +171,8 @@
                         android:elevation="10dp"
                         android:gravity="center"
                         android:orientation="vertical"
-                        android:weightSum="4"
-                        android:visibility="visible">
+                        android:visibility="visible"
+                        android:weightSum="4">
 
 
                         <ImageView
@@ -410,27 +410,28 @@
 
             </LinearLayout>
 
-<!--            <androidx.core.widget.NestedScrollView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:fillViewport="true"-->
-<!--                android:layout_marginStart="0dp"-->
-<!--                android:layout_marginTop="0dp"-->
-<!--                android:layout_marginEnd="0dp"-->
-<!--                android:layout_marginBottom="0dp"-->
-<!--                android:layout_below="@id/topLayout"-->
-<!--                android:layout_above="@id/lnyr_layout">-->
 
+            <fragment
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/lnyr_layout"
+                android:layout_below="@+id/topLayout" />
 
-                <fragment
-                    android:id="@+id/map"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@+id/lnyr_layout"
-                    android:layout_below="@+id/topLayout" />
+            <Button
+                android:id="@+id/path"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/topLayout"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/ic_path_box"
+                android:enabled="true"
+                android:gravity="end"
+                android:onClick="onPathClick" />
 
-<!--            </androidx.core.widget.NestedScrollView>-->
 
         </RelativeLayout>
 

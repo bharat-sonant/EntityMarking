@@ -19,6 +19,7 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -431,6 +432,43 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
+    public void onPathClick(View view){
+
+        try {
+            // Log the current path and line number
+            Log.e("MV"," Path " + dbColl.get(currentLineNumber) + " " + currentLineNumber);
+
+            // Get the list of LatLng for the current line number
+            List<LatLng> latLngList = dbColl.get(currentLineNumber);
+
+            // Ensure the list is not empty
+            if (latLngList == null || latLngList.isEmpty()) {
+                Log.e("Error", "LatLng list is null or empty");
+                return;
+            }
+
+            // Get the first LatLng from the list
+            LatLng latLng = latLngList.get(0);
+            String lat = String.valueOf(latLng.latitude);
+            String lon = String.valueOf(latLng.longitude);
+
+            // Log the latitude and longitude
+            Log.e("LatLng", " Lat " + lat + " Lng " + lon);
+
+            // Create the URI for Google Maps navigation
+            Uri gmmIntentUri = Uri.parse("google.navigation:q=" + lat + "," + lon);
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            mapIntent.setPackage("com.google.android.apps.maps");
+
+            // Start the activity
+            startActivity(mapIntent);
+        } catch (Exception e) {
+            // Log any exceptions
+            Log.e("Exception", e.getMessage(), e);
+        }
+
+
+    }
 
     private void getWardRoadDetail() {
 
