@@ -121,6 +121,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -220,7 +221,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         viewDetails = findViewById(R.id.view_details);
         tvRoadPreview = findViewById(R.id.tv_roadPreview);
 
-        date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
         preferences = getSharedPreferences("LoginDetails", MODE_PRIVATE);
         selectedWard = preferences.getString("assignment", null);
@@ -247,8 +248,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             checkVersionForTheApplication();
 
         }
-
-
 
         findViewById(R.id.img_road).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -726,6 +725,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     private void fetchWardJson() {
+
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         storageReference.child(preferences.getString("storagePath", "") + "/WardLinesHouseJson/" + selectedWard + "/mapUpdateHistoryJson.json").getMetadata().addOnSuccessListener(storageMetadata -> {
             long fileCreationTime = storageMetadata.getCreationTimeMillis();
@@ -1021,55 +1021,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void celForLine() {
 
-//        Log.e("EntityReverification","line no "+currentLineNumber);
-//        common.setProgressDialog("Please Wait....", "", this, this);
-//        rootRef.child("EntityReverification/" + selectedWard + "/" + "CardFound").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.getValue() != null) {
-////                    Log.e("EntityReverification", "line nooo " + currentLineNumber);
-////                    Log.e("EntityReverification", "line nooo " + snapshot.toString());
-//                    if (Objects.equals(snapshot.getKey(), "marksCount")) {
-////                        totalMarksTv.setText(String.valueOf(snapshot.getValue()));
-//                    }
-//                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-////                        Log.e("EntityReverification", "snapshot1 " + snapshot1.getValue().toString());
-////                        Log.e("EntityReverification", "snapshot1 " + snapshot1.getKey());
-//                        if (snapshot1.hasChild("lineNo")) {
-//                            String line = String.valueOf(snapshot1.child("lineNo").getValue());
-//                            if (snapshot1.hasChild("latLng")) {
-//                                String[] tempStr = String.valueOf(snapshot1.child("latLng").getValue()).split(",");
-//                                double lat = Double.parseDouble(tempStr[0]);
-//                                double lng = Double.parseDouble(tempStr[1]);
-////                                Log.e("EntityReverification", "snapshot1 " + lat + " " + lng);
-////                                if (isRejectedMarker(snapshot1)) {
-////                                    mDMMap.put(new LatLng(lat, lng), new MarkersDataModel(Boolean.parseBoolean(snapshot1.child("alreadyInstalled").getValue().toString()),
-////                                            (Boolean) isRejectedMarker(snapshot1),
-////                                            String.valueOf(snapshot1.child("date").getValue()),
-////                                            (String) snapshot1.child("image").getValue(),
-////                                            Integer.parseInt(String.valueOf(snapshot1.child("houseType").getValue())),
-////                                            Integer.parseInt(String.valueOf(snapshot1.getKey()))));
-////
-////                                    mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(common.BitmapFromVector(getApplicationContext(), R.drawable.rejected_marker_icon)));
-////                                } else {
-//                                String currentLine = String.valueOf((currentLineNumber + 1));
-//                                if (line.equals(currentLine)) {
-////                                    Log.e("EntityReverification", "snapshot1 line" + line);
-//                                    mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(common.BitmapFromVector(getApplicationContext(), R.drawable.gharicon)));
-//                                }
-////                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-
         cELOnLine = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -1122,202 +1073,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
-    private void celForLineCardNotFound() {
-
-        rootRef.child("EntityReverification/" + selectedWard + "/" + "CardNotFound").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.getValue() != null) {
-                    if (Objects.equals(snapshot.getKey(), "marksCount")) {
-//                        totalMarksTv.setText(String.valueOf(snapshot.getValue()));
-                    }
-                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                        Log.e("EntityReverification", "snapshot1 " + snapshot1.getValue().toString());
-                        Log.e("EntityReverification", "snapshot1 " + snapshot1.getKey());
-                        if (snapshot1.hasChild("lineNo")) {
-                            String line = String.valueOf(snapshot1.child("lineNo").getValue());
-                            Log.e("EntityReverification", "snapshot1" + line);
-                            if (snapshot1.hasChild("latLng")) {
-                                String[] tempStr = String.valueOf(snapshot1.child("latLng").getValue()).split(",");
-                                double lat = Double.parseDouble(tempStr[0]);
-                                double lng = Double.parseDouble(tempStr[1]);
-
-//                            if (isRejectedMarker(snapshot)) {
-//                                mDMMap.put(new LatLng(lat, lng), new MarkersDataModel(Boolean.parseBoolean(snapshot.child("alreadyInstalled").getValue().toString()),
-//                                        (Boolean) isRejectedMarker(snapshot),
-//                                        String.valueOf(snapshot.child("date").getValue()),
-//                                        (String) snapshot.child("image").getValue(),
-//                                        Integer.parseInt(String.valueOf(snapshot.child("houseType").getValue())),
-//                                        Integer.parseInt(String.valueOf(snapshot.getKey()))));
-//
-//                                mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(common.BitmapFromVector(getApplicationContext(), R.drawable.rejected_marker_icon)));
-//                            } else {
-                                String currentLine = String.valueOf((currentLineNumber + 1));
-                                if (line.equals(currentLine))
-                                    mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(common.BitmapFromVector(getApplicationContext(), R.drawable.rejected_marker_icon)));
-//                            }
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-//        cELOnLineCardNotFound = new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                if (snapshot.getValue() != null) {
-//                    if (Objects.equals(snapshot.getKey(), "marksCount")) {
-////                        totalMarksTv.setText(String.valueOf(snapshot.getValue()));
-//                    }
-//                    if (snapshot.hasChild("latLng")) {
-//                        String[] tempStr = String.valueOf(snapshot.child("latLng").getValue()).split(",");
-//                        double lat = Double.parseDouble(tempStr[0]);
-//                        double lng = Double.parseDouble(tempStr[1]);
-//
-//                        if (isRejectedMarker(snapshot)) {
-//                            mDMMap.put(new LatLng(lat, lng), new MarkersDataModel(Boolean.parseBoolean(snapshot.child("alreadyInstalled").getValue().toString()),
-//                                    (Boolean) isRejectedMarker(snapshot),
-//                                    String.valueOf(snapshot.child("date").getValue()),
-//                                    (String) snapshot.child("image").getValue(),
-//                                    Integer.parseInt(String.valueOf(snapshot.child("houseType").getValue())),
-//                                    Integer.parseInt(String.valueOf(snapshot.getKey()))));
-//
-//                            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(common.BitmapFromVector(getApplicationContext(), R.drawable.rejected_marker_icon)));
-//                        } else {
-//                            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(common.BitmapFromVector(getApplicationContext(), R.drawable.rejected_marker_icon)));
-//                        }
-//                    }
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                if (Objects.equals(snapshot.getKey(), "marksCount")) {
-////                    totalMarksTv.setText(String.valueOf(snapshot.getValue()));
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        };
-
-    }
-
-    private void celForLineCardDetailNotFound() {
-
-//        rootRef.child("EntityReverification/" + selectedWard + "/" + "CardDetailNotFound").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                common.closeDialog(MapActivity.this);
-//                if (snapshot.getValue() != null) {
-//                    if (Objects.equals(snapshot.getKey(), "marksCount")) {
-////                        totalMarksTv.setText(String.valueOf(snapshot.getValue()));
-//                    }
-//                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-//                        Log.e("EntityReverification", "snapshot1 " + snapshot1.getValue().toString());
-//                        Log.e("EntityReverification", "snapshot1 " + snapshot1.getKey());
-//                        if (snapshot1.hasChild("lineNo")) {
-//                            String line = String.valueOf(snapshot1.child("lineNo").getValue());
-//                            Log.e("EntityReverification", "snapshot1" + line);
-//                            if (snapshot1.hasChild("latLng")) {
-//                                String[] tempStr = String.valueOf(snapshot1.child("latLng").getValue()).split(",");
-//                                double lat = Double.parseDouble(tempStr[0]);
-//                                double lng = Double.parseDouble(tempStr[1]);
-//
-////                            if (isRejectedMarker(snapshot)) {
-////                                mDMMap.put(new LatLng(lat, lng), new MarkersDataModel(Boolean.parseBoolean(snapshot.child("alreadyInstalled").getValue().toString()),
-////                                        (Boolean) isRejectedMarker(snapshot),
-////                                        String.valueOf(snapshot.child("date").getValue()),
-////                                        (String) snapshot.child("image").getValue(),
-////                                        Integer.parseInt(String.valueOf(snapshot.child("houseType").getValue())),
-////                                        Integer.parseInt(String.valueOf(snapshot.getKey()))));
-////
-////                                mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(common.BitmapFromVector(getApplicationContext(), R.drawable.rejected_marker_icon)));
-////                            } else {
-//                                String currentLine = String.valueOf((currentLineNumber + 1));
-//                                if (line.equals(currentLine))
-//                                    mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(common.BitmapFromVector(getApplicationContext(), R.drawable.rejected_marker_icon)));
-////                            }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-
-//        cELOnLineCardNotFound = new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                if (snapshot.getValue() != null) {
-//                    if (Objects.equals(snapshot.getKey(), "marksCount")) {
-////                        totalMarksTv.setText(String.valueOf(snapshot.getValue()));
-//                    }
-//                    if (snapshot.hasChild("latLng")) {
-//                        String[] tempStr = String.valueOf(snapshot.child("latLng").getValue()).split(",");
-//                        double lat = Double.parseDouble(tempStr[0]);
-//                        double lng = Double.parseDouble(tempStr[1]);
-//
-//                        if (isRejectedMarker(snapshot)) {
-//                            mDMMap.put(new LatLng(lat, lng), new MarkersDataModel(Boolean.parseBoolean(snapshot.child("alreadyInstalled").getValue().toString()),
-//                                    (Boolean) isRejectedMarker(snapshot),
-//                                    String.valueOf(snapshot.child("date").getValue()),
-//                                    (String) snapshot.child("image").getValue(),
-//                                    Integer.parseInt(String.valueOf(snapshot.child("houseType").getValue())),
-//                                    Integer.parseInt(String.valueOf(snapshot.getKey()))));
-//
-//                            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(common.BitmapFromVector(getApplicationContext(), R.drawable.rejected_marker_icon)));
-//                        } else {
-//                            mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(common.BitmapFromVector(getApplicationContext(), R.drawable.rejected_marker_icon)));
-//                        }
-//                    }
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//                if (Objects.equals(snapshot.getKey(), "marksCount")) {
-////                    totalMarksTv.setText(String.valueOf(snapshot.getValue()));
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-//            }
-//
-//            @Override
-//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        };
-
-    }
 
     private boolean isRejectedMarker(DataSnapshot snapshot) {
         Log.e("Marking Value", "" + snapshot.toString());

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-        setDatabase("Manesar");
+        setDatabase("Test");
     }
 
     @SuppressLint("StaticFieldLeak")
