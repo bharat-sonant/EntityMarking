@@ -413,6 +413,9 @@ public class CommonFunctions {
             case "Jodhpur-BWG":
                 path = "https://dtdjodhpur-bwg.firebaseio.com/";
                 break;
+            case "Chirawa":
+                path = "https://dtdchirawa.firebaseio.com/";
+                break;
             case "Test":
                 path = "https://dtdnavigatortesting.firebaseio.com/";
                 break;

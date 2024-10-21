@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-        setDatabase("Test");
+        setDatabase("Chirawa");
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         String path = cmn.getDatabase(city);
         dbPathSP.edit().putString("dbPath", path).apply();
         dbPathSP.edit().putString("storagePath", city).apply();
-        dbPathSP.edit().putString("prefix", "MNZ").apply();
+        dbPathSP.edit().putString("prefix", "CHI").apply();
         loginIntent();
     }
 
